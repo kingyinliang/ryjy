@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>视频播放</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			#chapterList:before{
+				background:none;
+			}
+			#chapterList{
+				padding-bottom: 20px;
+			}
+			.lists .mui-table-view:before{
+				background:none;
+			}
+			.lists{
+				padding:0 10px;
+			}
+			.lists li:after{
+				left:0;
+				background:none;
+			}
+			.lists li b{
+				display: block;
+				max-width:80%;
+			    text-align: left;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			    overflow: hidden;
+				font-weight:normal;
+			}
+			#downloadbtn{
+				z-index: 2;
+				position:fixed;
+				bottom:60px;
+				right:30px;
+				background:url('images/downVoid.png') no-repeat center;
+				width:50px;
+				height:50px;
+				background-size:contain;
+				border: none;
+				box-shadow:0 0 4px #000;
+				border-radius:100%;
+			}
+			#downloadbtn:active{
+				opacity:.7;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav mui-bar-transparent" style="background-color: rgb(247, 247, 247,0);">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title pagetitle">视频播放</h1>
+		</header>
+		<div class="mui-content" style="background-color: white;">
+			<div id="polyvplayer"></div>
+			<div style="margin-top: 10%;">
+				<button type="button" id="downloadbtn"></button>
+				<label style="text-align: center;font-size: larger;display: block;height: 50px;">章节</label>
+				<ul class="mui-table-view" id="chapterList" style="top: 10px;"></ul>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/polyvplayer.min.js" ></script>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js" ></script>
+		<script type="text/javascript" src="js/sendRequest.js" ></script>
+		<script type="text/javascript" src="js/polyvPlayPlugin.js" ></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js" type="text/javascript"></script>
+		
+		<script>
+			var player;
+			var userObj = JSON.parse(localStorage.getItem(localStorage.getItem('ryjy_user')+"$state"));
+			var userId = "";
+			if(userObj){
+				userId = userObj.user_id;
+			}
+			// 涉及到5+API的内容，均在plusready事件后调用；
+			document.addEventListener('plusready', function(event) {
+				
+				// 点击视频列表
+				$("#chapterList").on('tap','.clickplay',function(){
+					tooglePlay($(this).children("div.chaptertiele").text(),this.getAttribute("video_id"),this.getAttribute("duration"));
+				});
+				// 点击下载
+				$("#downloadbtn").on('tap',function(){
+					var polyvDownloadInfo = {
+						"vid":this.getAttribute("videoid"),
+						"bitrate":"3",
+						"title":this.getAttribute("videotitle"),
+						"duration":this.getAttribute("duration")
+					};
+					plus.PolyvPlugin.startDownload(polyvDownloadInfo,function(result){
+						plus.nativeUI.toast(result);
+					})
+				});
+				
+				window.s2j_onFullScreen = function(){
+					var osName = plus.os.name;
+					if(osName === 'Android') {
+						fullScreenOfAndroid();
+					} else if(osName === 'iOS') {
+						var videoElem = document.getElementById('polyvplayer');
+						fullScreenOfIos(videoElem);
+					}
+				}
+				
+				// 按下返回按钮
+				mui.oldBack = mui.back;
+				mui.back = function(event) {
+					if(player){
+						player.destroy();
+						player = null;
+					}
+					mui.oldBack();
+				};
+					
+				window.s2j_onPlayStart = function(){
+					console.log("视频缓冲完毕，马上开始播放");
+				}
+				window.s2j_onVideoPlay = function(){
+					console.log("视频播放……");
+				}
+				window.s2j_onVideoPause = function(){
+					console.log("视频暂停……");
+				}
+				window.onbuffer = function(){
+					console.log("视频缓冲中……");
+				}
+				window.s2j_onPlayerError = function(t,d){
+					console.log("播放出错");
+					console.log(JSON.stringify(t));
+					console.log(JSON.stringify(d));
+				}
+				
+			});
+
+			/**
+			 * 视频全屏播放旋转目前的逻辑
+			 * 视频全屏，即锁定屏幕为横屏。
+			 * 视频恢复，则解除屏幕方向的锁定。
+			 * 具体的切换，根据自己的实际业务做相应的操作。
+			 */
+			// Android平台的视频全屏旋转
+			var fullScreenOfAndroid = function() {
+				if(true) {
+					// 最新5+API的支持
+					var self = plus.webview.currentWebview();
+					self.setStyle({
+						videoFullscreen: 'landscape'
+					});
+				} else {
+					// 如果暂未更新sdk，可以先使用差量升级等方式，做出兼容处理；
+					// 旧版本下的兼容处理
+					document.addEventListener('webkitfullscreenchange', function() {
+						var el = document.webkitFullscreenElement; //获取全屏元素
+						if(el) {
+							plus.screen.lockOrientation('landscape'); //锁死屏幕方向为横屏
+						} else {
+							plus.screen.unlockOrientation(); //解除屏幕方向的锁定
+						}
+					});
+
+				}
+			};
+			// iOS平台的视频全屏旋转
+			var fullScreenOfIos = function(videoElem) {
+				// 监听的事件与Android平台有很大区别
+				videoElem.addEventListener('webkitbeginfullscreen', function() {
+					plus.screen.lockOrientation('landscape'); //锁死屏幕方向为横屏
+				});
+				videoElem.addEventListener('webkitendfullscreen', function() {
+					plus.screen.unlockOrientation(); //解除屏幕方向的锁定
+				});
+			};
+			// 切换视频播放
+			function tooglePlay(title,videoid,duration){
+				var secretkey = 'aP3m9d8m2d';
+				var ts = new Date().getTime();
+				var vid = videoid;
+				var sign = md5(secretkey+vid+ts);
+				var option = {
+					vid:vid,
+					autoplay:true,
+					ts:ts,
+					sign:sign,
+				}
+				player.changeVid(option);
+				$("#downloadbtn").attr({"videotitle":title,"videoid":videoid,"duration":duration});
+			}
+			var topItem = '<div class="lists"><p class="title"></p><ul class="mui-table-view mui-table-view-chevron"></ul></div>';
+			var secondItem = '<li class="mui-table-view-cell mui-collapse conameli"><a class="mui-navigate-right" href="#"></a>'+
+									'<ul class="mui-table-view mui-table-view-chevron cnameSubUl"></ul>'+
+								'</li>';
+			var thirdItem  = '<li class="mui-table-view-cell clickplay">'+
+								'<img class="mui-media-object mui-pull-left" src="images/vide.png">'+
+								'<div class="mui-media-body chaptertiele"></div>'+
+							 '</li>';
+			var downloaded = '<span class="mui-badge mui-badge-success">已下载</span>';
+			var needNet = '<span class="mui-badge duration"></span>';
+			// 更新章节信息
+			document.addEventListener('changeChapter', function(event) {
+				$(".pagetitle").text(event.detail.pagetitle);
+				if(!userId){
+					userId = JSON.parse(localStorage.getItem(localStorage.getItem('ryjy_user')+"$state")).user_id;
+				}
+				plus.PolyvPlugin.PolyvPluginInit(userId,function(result){
+					console.log(result);
+				});
+				var getVideosInfo = {'userId':userId,'coid':event.detail.coid};
+				appSendReq.getVideosBycoid(getVideosInfo,function(data){
+					data = JSON.parse(data);
+					if(data && '200'==data.code){
+						$("#chapterList").empty();
+						// 渲染课程列表
+						mui.each(data.data.list,function(i,item){
+							$("#chapterList").append(topItem);
+							$($("#chapterList div.lists")[i]).children("p.title").text(item.chapter);
+							$($("#chapterList div.lists")[i]).children("ul")[0].setAttribute('coid',item.coid);
+							var levelone = i;
+							var leveltwo = 0;
+							
+							// 渲染课程下的具体科目列表
+							mui.each(item.chids,function(i,item){
+								$('ul[coid="'+item.coid+'"]')[levelone].insertAdjacentHTML('beforeEnd',secondItem);
+								if(i==0 && levelone==0){
+									$('ul[coid="'+item.coid+'"]').children("li.conameli")[0].classList.add("mui-active");
+								}
+								$($($('ul[coid="'+item.coid+'"]')[levelone]).children("li.conameli")[i]).children("a").text(item.subject);
+								leveltwo = i;
+								for(var i in item.chids){
+									item.chids[i].coid = item.coid;
+								}
+								for (var i in item.chids) {
+									$($("ul[coid='"+item.chids[i].coid+"']:eq("+levelone+") li.conameli ul.cnameSubUl")[leveltwo]).append(thirdItem);
+									$($($("ul[coid='"+item.chids[i].coid+"']:eq("+levelone+") li.conameli ul.cnameSubUl:eq("+leveltwo+") li.clickplay"))[i]).find("div").text(item.chids[i].course);
+									$($($("ul[coid='"+item.chids[i].coid+"']:eq("+levelone+") li.conameli ul.cnameSubUl:eq("+leveltwo+") li.clickplay"))[i]).attr({"couid":item.chids[i].couid,"video_id":item.chids[i].video_id,"duration":item.chids[i].duration});
+									if(0==i && leveltwo==0 && levelone==0){
+										var vid = item.chids[i].video_id;
+										if(!player){
+											var secretkey = 'aP3m9d8m2d';
+											var ts = new Date().getTime();
+											var sign = md5(secretkey+vid+ts);
+											player = polyvObject('#polyvplayer').videoPlayer({
+											    'width':'100%',
+												'height':'262',
+												'forceH5': true,
+												'autoplay':false,
+												'speed':false,
+												'showHd':false,
+											    'vid' : vid,
+											    'ts': ts,
+											    'sign':sign
+											});
+										}else{
+											tooglePlay(item.chids[i].course,vid,item.chids[i].duration);
+										}
+										
+										$("#downloadbtn").attr({"videotitle":item.chids[i].course,"videoid":vid,"duration":item.chids[i].duration});
+									}
+									if(i==item.chids.length-1){
+										//显示当前页面
+    									mui.currentWebview.show();
+									}
+								}
+							});
+						});
+					}
+				});
+			});	
+		</script>
+	</body>
+</html>

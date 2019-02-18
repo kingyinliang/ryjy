@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>首页</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/iconfont.css" rel="stylesheet" />
+		<link href="css/crearStyle.css" rel="stylesheet" />
+		<style>
+			ul {
+				font-size: 14px;
+				color: #8f8f94;
+			}
+			.textCenter{
+			    background-color: #ff456d;
+			    color:  white;
+			    border-radius: 48%;
+			    padding: 10%;
+			    font-size: larger;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav mui-bar-transparent" style="background-color: rgb(247, 247, 247,0);">
+			<h1 class="mui-title">融跃教育</h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab">
+		    <a id="toIndex" class="mui-tab-item mui-active" href="#tabbar-home">
+		        <span class="mui-icon iconfont icon-shouye"></span>
+		        <span class="mui-tab-label">首页</span>
+		    </a>
+		    <!--<a class="mui-tab-item" href="#tabbar-itembank">
+		        <span class="mui-icon iconfont icon-plus-itembank" style="font-size: 20px;top: 6px;"></span>
+		        <span class="mui-tab-label">题库</span>
+		    </a>-->
+		    <a id="downloadInfo" class="mui-tab-item" href="#tabbar-download">
+		        <span class="mui-icon iconfont icon-xiazai"></span>
+		        <span class="mui-tab-label">下载</span>
+		    </a>
+		    <a id="toPerson" class="mui-tab-item" href="#tabbar-person">
+		        <span class="mui-icon iconfont icon-iconfontgerenzhongxin"></span>
+		        <span class="mui-tab-label">个人</span>
+		    </a>
+		</nav>
+		<div class="mui-content">
+			<div id="tabbar-home" class="mui-control-content mui-active">
+				<!-- 图片轮播 -->
+				<div id="slider" class="mui-slider" >
+				  <div class="mui-slider-group mui-slider-loop">
+				    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+				    <div class="mui-slider-item mui-slider-item-duplicate">
+				      <a href="#">
+				        <img src="images/banner.png">
+				      </a>
+				    </div>
+				    <!-- 第一张 -->
+				    <div class="mui-slider-item mui-active">
+				      <a href="#">
+				        <img src="images/banner.png">
+				      </a>
+				    </div>
+				    <!-- 第二张 -->
+				    <div class="mui-slider-item">
+				      <a href="#">
+				        <img src="images/banner.png">
+				      </a>
+				    </div>
+				    <!-- 第三张 -->
+				    <div class="mui-slider-item">
+				      <a href="#">
+				        <img src="images/banner.png">
+				      </a>
+				    </div>
+				    <!-- 第四张 -->
+				    <div class="mui-slider-item">
+				      <a href="#">
+				        <img src="images/banner.png">
+				      </a>
+				    </div>
+				    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+				    <div class="mui-slider-item mui-slider-item-duplicate">
+				      <a href="#">
+				        <img src="images/banner.png">
+				      </a>
+				    </div>
+				  </div>
+				  <div class="mui-slider-indicator">
+				    <div class="mui-indicator mui-active"></div>
+				    <div class="mui-indicator"></div>
+				    <div class="mui-indicator"></div>
+				    <div class="mui-indicator"></div>
+				  </div>
+				</div>
+				<div class="adverString">发现更优秀的你,让学习如此<b>简单</b></div>
+				<ul class="mui-table-view mui-grid-view item_xcss">
+					<li class="mui-table-view-cell mui-media mui-col-xs-3">
+						<a href="#">
+							<img class="mui-media-object" src="images/voio01.png">
+							<div class="mui-media-body">CFA</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-3">
+						<a href="#">
+							<img class="mui-media-object" src="images/voio02.png">
+							<div class="mui-media-body">FRM</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-3">
+						<a href="#">
+							<img class="mui-media-object" src="images/voio03.png">
+							<div class="mui-media-body">ACCA</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-3">
+						<a href="#">
+							<img class="mui-media-object" src="images/voio04.png">
+							<div class="mui-media-body">实务课</div>
+						</a>
+					</li>
+				</ul>
+				<div class="recommond">
+					<div class="title">
+						我的视频
+					</div>
+					<ul id="videoTitleList" class="mui-table-view">
+					</ul>
+				</div>
+			</div>
+			<!--<div id="tabbar-itembank" class="mui-control-content">
+				<div class="title">融跃题库</div>
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">题目1</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">题目2</a></li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">题目3</a></li>
+				</ul>
+			</div>-->
+			<div id="tabbar-download" class="mui-control-content down_xcss">
+				<div id="polyvcacheplayer"></div>
+				<h6>提醒：向左拖拽视频可进行删除。</h6>
+				<ul id="downloadList" class="mui-table-view down_list">
+				</ul>
+			</div>
+			<div id="tabbar-person" class="mui-control-content">
+		    	<ul class="mui-table-view">
+					<li class="mui-table-view-cell" style="text-align: center;position: static;">
+						<img id="headImg" src="images/user-photo.png" style="max-width: 100px;"/>
+					</li>
+					<li class="mui-table-view-cell" style="text-align: center;position: static;padding: 0;">
+						<label id="nickName">你好</label>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-row">
+						    <div class="mui-col-xs-4" style="text-align: center;border-right: solid 1px;"><label>题库信息</label><br><span>0</span></div>
+						    <div class="mui-col-xs-4" style="text-align: center;border-right: solid 1px;"><label>余额</label><br><span id="balance">0</span></div>
+						    <div class="mui-col-xs-4" style="text-align: center;"><label>下载视频</label><br><span>0</span></div>
+						</div>
+					</li>
+				</ul>
+				<ul class="mui-table-view">
+					
+					<li class="mui-table-view-cell" id="aboutwe">
+						<a class="mui-navigate-right">
+							关于我们
+						</a>
+					</li>
+					<li class="mui-table-view-cell" id="servicetext">
+						<a class="mui-navigate-right">
+							服务协议
+						</a>
+					</li>
+					<li class="mui-table-view-cell" id="checkupdate">
+						<a class="mui-navigate-right">
+							检查更新
+						</a>
+					</li>
+					<li class="mui-table-view-cell" id="resetpwd">
+						<a id="retpwd-btn" class="mui-navigate-right">
+							重置密码
+						</a>
+					</li>
+				</ul>
+				<ul class="mui-table-view" style="margin-top: 25px;">
+					<li class="mui-table-view-cell">
+						<a id="exit" style="text-align: center;color: #FF3B30;">
+							退出登录
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/sendRequest.js" ></script>
+		<script type="text/javascript" src="js/polyvPlayPlugin.js" ></script>
+		<script type="text/javascript" src="js/polyvplayer.min.js" ></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js" ></script>
+		<script>
+			(function($, doc) {
+				$.init({
+					// 设置顶部状态栏背景色
+					statusBarBackground: 'rgba(250, 250, 250, 0)'
+				});
+				// 免登处理
+				function checkIsLogin(loginPage){
+					var cacheUser = localStorage.getItem("ryjy_user");
+					var userObj = app.getState(cacheUser);
+					// 班级dom 
+					var videoclass = '<li class="mui-table-view-cell mui-media videoItem">'+
+										'<a href="javascript:void(0)">'+
+											'<img  alt="" class="mui-col-xs-2" src="images/vide.png" style="height: 45px;max-width: 60px;">'+
+											'<div class="conmont mui-col-xs-10"><p class="cnametext"></p></div>'+
+										'</a>'+
+									'</li>';
+					if(userObj && userObj.session_id && userObj.password){
+						plus.PolyvPlugin.PolyvPluginInit(userObj.user_id,function(result){
+							console.log(result);
+						});
+						var sessionObj = {'sessionId':userObj.session_id,'password':userObj.password};
+						appSendReq.sessionLogin(sessionObj,function(data){
+							data = JSON.parse(data);
+							// 用户为登录态
+							if(data && '200'==data.code){
+								var getBuyVInfo = {'userId':userObj.user_id};
+								// 获取已购买视频
+								appSendReq.getBuyVideos(getBuyVInfo,function(data){
+									data = JSON.parse(data);
+									if(data && '200'== data.code){
+										// 渲染课程套餐列表
+										mui.each(data.data,function(index,item){
+											if(index==0){
+												mui("#videoTitleList")[0].innerHTML = "";
+											}
+											/*
+										     beforeBegin: 插入到标签开始前
+										     afterBegin:插入到标签开始标记之后
+										     beforeEnd:插入到标签结束标记前
+										     afterEnd:插入到标签结束标记后
+											 */
+											mui('#videoTitleList')[0].insertAdjacentHTML('beforeEnd',videoclass);
+											mui('.cnametext')[index].innerText = item.coname;
+											mui('.cnametext')[index].insertAdjacentHTML('afterEnd',"<span>视频："+item.number+"个<i>|</i>时长："+item.sum_time+"</span>");
+											mui('.videoItem')[index].children[0].children[0].setAttribute('src',item.image);
+											mui('.videoItem')[index].setAttribute('coid',item.coid);
+										});
+									}
+								});
+							}else if('100'==data.code){
+								plus.nativeUI.toast(data.msg);
+								loginPage.show();
+							}
+						});
+					}else{
+						loginPage.show();
+					}
+				}
+				$.plusReady(function() {
+					// close 启动等待页面
+					setTimeout(function() {
+						//关闭 splash
+						plus.navigator.closeSplashscreen();
+					}, 3000);
+					
+					//获得slider插件对象 设置自动轮播
+					var gallery = mui('#slider');
+					gallery.slider({
+					  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
+					});
+					
+					/***********main页面通用事件**********/
+					var loginPage = $.preload({
+						"id": 'login',
+						"url": 'login.html'
+					});
+					var plyvedioPlayPage = $.preload({
+						"id": 'polyvPlay',
+						"url": 'polyvPlay.html'
+					});
+					var aboutwe = $.preload({
+						"id": 'aboutwe',
+						"url": 'aboutwe.html'
+					});
+					var servicetext = $.preload({
+						"id": 'servicetext',
+						"url": 'servicetext.html'
+					});
+					var resetpwd = $.preload({
+						"id": 'resetpwd',
+						"url": 'resetpwd.html'
+					});
+					//处理免登陆
+					checkIsLogin(loginPage);
+					// 点击首页tab的时候处理免登陆
+					doc.getElementById("toIndex").addEventListener('tap',function(e){
+						checkIsLogin(loginPage);
+					});
+					//点击个人中心
+					var checkToLogin = doc.getElementById("toPerson");
+					checkToLogin.addEventListener('tap',function(event){
+						var cacheUser = localStorage.getItem("ryjy_user");
+						if(!cacheUser){
+							mui("#toPerson")[0].removeAttribute('href');
+							plus.webview.open('login.html');
+						}else{
+							var userObj = JSON.parse(localStorage.getItem(cacheUser+"$state"));
+							if(userObj){
+								if(userObj.user_image){
+									$("#headImg")[0].setAttribute('src',userObj.user_image);
+								}
+								mui("#nickName")[0].innerText = (userObj.nickname || userObj.realname || userObj.username || "同学")+" 你好";
+								mui("#balance")[0].innerText = userObj.user_money || 0;
+							}
+							return;
+						}
+					});
+					//点击下载tab
+					var downloadInfo = doc.getElementById("downloadInfo");
+					downloadInfo.addEventListener('tap',function(event){
+						var downloadElement = '<li class="mui-table-view-cell mui-transitioning downOn">'+
+												'<div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red deldowninfo">删除</a></div>'+
+												'<div class="mui-slider-handle mui-table">'+
+													'<div class="mui-table-cell">'+
+														'<a href="">'+
+															'<div class="listDown mui-col-xs-4 mui-pull-left">'+
+																'<img src="images/down.png " alt=" "/>'+
+																'<div class="opentin "></div>'+
+																'<i style="width:20%;"></i>'+
+															'</div>'+
+															'<div class="DownCommon mui-col-xs-8 mui-pull-left ">'+
+																'<p></p>'+
+																'<span>'+
+																	'<b class="mui-pull-left alreadyDown"></b>'+
+																	'<b class="mui-pull-right duration"></b>'+
+																'</span>'+
+															'</div>'+
+														'</a>'+
+													'</div>'+
+												'</div>'+
+											'</li>';
+						var downloads = plus.PolyvPlugin.getAllDownloadList([]);
+						var downloadList = JSON.parse(downloads.alldownloads);
+						jQuery("#downloadList").empty();
+						mui.each(downloadList,function(i,e){
+							$("#downloadList")[0].insertAdjacentHTML('beforeEnd',downloadElement);
+							$($("#downloadList li.downOn")[i])[0].setAttribute('vid',e.vid);
+							var downCommonDiv = $($("#downloadList li.downOn")[i])[0].children[1].children[0].children[0].children[1];
+							$(downCommonDiv)[0].children[0].innerText = e.title;
+							var bitrate = e.bitrate==1?"流畅":e.bitrate==2?"高清":e.bitrate==3?"超清":"";
+							$(downCommonDiv)[0].children[1].children[0].innerText = bitrate;
+							$(downCommonDiv)[0].children[1].children[1].innerText = e.duration?"时长 "+e.duration:"时长 "+0;
+						});
+					});
+					$("#downloadList").on('tap','.deldowninfo',function(){
+						var vid = this.parentElement.parentElement.getAttribute("vid");
+						var polyvDownloadInfo = {
+							"vid":vid,
+							"bitrate":"3",
+						};
+						plus.PolyvPlugin.deleteTask(polyvDownloadInfo,function(result){
+							plus.nativeUI.toast(result);
+							$("#downloadList li[vid='"+vid+"']")[0].remove();
+						},function(result){
+							plus.nativeUI.toast(result);
+						});
+					});
+					var cacheplayer;
+					$("#downloadList").on('tap','.downOn',function(){
+						var vid = this.getAttribute("vid");
+						var secretkey = 'aP3m9d8m2d';
+						var ts = new Date().getTime();
+						var sign = md5(secretkey+vid+ts);
+						if(!cacheplayer){
+							cacheplayer = polyvObject("#polyvcacheplayer").videoPlayer({
+							    'width':'100%',
+								'height':'262',
+								'forceH5': true,
+								'autoplay':true,
+							    'vid' : vid,
+							    'ts': ts,
+							    'sign':sign
+							});
+						}else{
+							var option = {
+								vid:vid,
+								autoplay:true,
+								ts:ts,
+								sign:sign,
+							}
+							cacheplayer.changeVid(option);
+						}
+						
+//						var polyvDownloadInfo = {
+//							"vid":vid,
+//							"bitrate":"3",
+//						};
+//						plus.PolyvPlugin.deleteTask(polyvDownloadInfo,function(result){
+//							plus.nativeUI.toast(result);
+//							$("#downloadList li[vid='"+vid+"']")[0].remove();
+//						},function(result){
+//							plus.nativeUI.toast(result);
+//						});
+					});
+					// 按下返回按钮
+					$.oldBack = mui.back;
+					var backButtonPress = 0;
+					$.back = function(event) {
+						backButtonPress++;
+						if(backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+					
+					/***********tab1事件**********/
+					$("#videoTitleList").on('tap','.videoItem',function(){
+						var playpage = plus.webview.getWebviewById('polyvPlay');
+						//触发视频页面的章节列表更新
+						mui.fire(playpage,'changeChapter',{
+						    coid:this.getAttribute('coid'),
+						    pagetitle:this.firstChild.lastChild.firstChild.textContent
+						});
+					});
+					/***********tab2事件**********/
+					/***********tab3事件**********/
+					//关于我们
+					doc.getElementById("aboutwe").addEventListener('tap',function(){
+						aboutwe.show();
+					});
+					//服务协议
+					doc.getElementById("servicetext").addEventListener('tap',function(){
+						servicetext.show();
+					});
+					//重置密码
+					doc.getElementById("resetpwd").addEventListener('tap',function(){
+						resetpwd.show();
+					});
+					//重置密码
+					doc.getElementById("checkupdate").addEventListener('tap',function(){
+						plus.nativeUI.toast("已经是最新版本");
+					});
+					//退出操作******************
+					document.getElementById('exit').addEventListener('tap', function() {
+						var cacheUser = localStorage.getItem("ryjy_user");
+						if (mui.os.ios) {
+							app.clearState(cacheUser);
+							loginPage.show();
+							return;
+						}
+						var btnArray = [{
+							title: "注销当前账号"
+						}, {
+							title: "直接关闭应用"
+						}];
+						plus.nativeUI.actionSheet({
+							cancel: "取消",
+							buttons: btnArray
+						}, function(event) {
+							var index = event.index;
+							switch (index) {
+								case 1:
+									//注销账号
+									app.clearState(cacheUser);
+									//若启动页不是登录页，则需通过如下方式打开登录页
+									loginPage.show();
+									break;
+								case 2:
+									plus.runtime.quit();
+									break;
+							}
+						});
+					}, false);
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

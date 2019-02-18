@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">短信登录</h1>
+		</header>
+		<div class="mui-content">
+		    <form class="mui-input-group">
+		        <div class="mui-input-row">
+		            <input id="phoneNum" type="number" class="mui-input-clear" placeholder="请输入手机号">
+		        </div>
+		        <div class="mui-input-row">
+		        	<button id='sendSmsBtn' type="button" class="mui-btn mui-btn-blue mui-btn-block" style="padding-right: 27%;">发送验证码</button>
+		        	<input id='checkCode' type="number" class="mui-input" placeholder="请输入验证码" style="padding-left: 15px;width: 68%;">
+				</div>
+				<div class="mui-content-padded">
+					<button id='smsLoginBtn' class="mui-btn mui-btn-block mui-btn-primary">确认登录</button>
+				</div>
+		    </form>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/sendRequest.js"></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			(function($,doc){
+				$.init();
+				$.plusReady(function(){
+					// 点击发送短信
+					mui(document.body).on('tap','#sendSmsBtn', function(event) {
+						var phoneNum = $("#phoneNum")[0].value;
+						if(!phoneNum || phoneNum.trim() == ""){
+							plus.nativeUI.toast("手机号码不能为空");
+						}
+						var sendBtn = mui(this);
+						var i = 60;
+						var myVar=setInterval(function(){
+							if(i && i==1){
+								sendBtn[0].innerText = '发送验证码';
+								window.clearInterval(myVar);
+								return;
+							}
+							i--;
+							sendBtn[0].innerText = '已发送 ('+i+'s)';
+						},1000);
+						// 发送短信
+						appSendReq.sendSMS(phoneNum,function(data){
+							data = JSON.parse(data);
+							if(!data || data.code=='100'){
+								plus.nativeUI.toast("短信发送失败");
+								return;
+							}
+							plus.nativeUI.toast("短信已发送");
+						})
+						
+					});
+					// 点击短信登录
+					doc.getElementById("smsLoginBtn").addEventListener('tap', function(event) {
+						if(!$("#phoneNum")[0].value || $("#phoneNum")[0].value.trim() == ""){
+							plus.nativeUI.toast("手机号码不能为空");
+						}
+						if(!$("#checkCode")[0].value || $("#checkCode")[0].value.trim() == ""){
+							plus.nativeUI.toast("验证码不能为空");
+						}
+						var checkRequest = {'phone':$("#phoneNum")[0].value,
+											'code':$("#checkCode")[0].value};
+						appSendReq.checkSMSCode(checkRequest,function(data){
+							data = JSON.parse(data);
+							if(!data || data.code=='100'){
+								if(data.msg){
+									plus.nativeUI.toast(data.msg);
+									return;
+								}
+								plus.nativeUI.toast("短信验证失败");
+								return;
+							}
+							$("#phoneNum")[0].value="";
+							$("#checkCode")[0].value="";
+							$.openWindow({
+								url: 'main.html',
+								id: 'main',
+								preload:true,
+								show: {
+									aniShow: 'pop-in'
+								},
+								styles: {
+									popGesture: 'hide'
+								},
+								waiting: {
+									autoShow: false
+								}
+							});
+						})
+					});
+				});
+			}(mui, document));
+			
+		</script>
+	</body>
+
+</html>

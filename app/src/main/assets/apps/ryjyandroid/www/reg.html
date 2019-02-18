@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>账号注册</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+		<style>
+			.area {
+				margin: 20px auto 0px auto;
+			}
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			.mui-input-group label {
+				width: 22%;
+			}
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 78%;
+			}
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			.mui-btn {
+				padding: 10px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">注册</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+			    <li class="mui-table-view-cell mui-collapse mui-active">
+			    	<a class="mui-navigate-right" href="#">邮箱注册</a>
+			    	<div class="mui-collapse-content" autocomplete="off">
+				    	<!-- 邮箱注册 -->
+				       	<form class="mui-input-group">
+							<div class="mui-input-row">
+								<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入用户名">
+							</div>
+							<div class="mui-input-row">
+								<input id='email' type="email" class="mui-input-clear mui-input" placeholder="请输入邮箱">
+							</div>
+							<div class="mui-input-row">
+								 <input type="password" style="display:none"/>
+								<input id='password' type="text" class="mui-input-password" onfocus="this.type='password'" autocomplete="off" placeholder="请输入登录密码">
+							</div>
+							<div class="mui-text-left" style="color: red;margin-top: 10px;">
+					            <span class="mui-icon mui-icon-info" style="padding-left: 4%;font-size: larger;font-weight: bold;"></span>
+					            <h6 style="position: relative;display: -webkit-inline-box;">登录密码必须包含字母和数字，至少6位</h6>
+					        </div> 
+							<div class="mui-content-padded">
+								<button id='emailReg' class="mui-btn mui-btn-block mui-btn-primary">确认注册</button>
+							</div>
+						</form>
+					</div>
+			    </li>
+			    <li class="mui-table-view-cell mui-collapse">
+			    	<a class="mui-navigate-right" href="#">短信注册</a>
+			    	<div class="mui-collapse-content">
+				    	<!-- 短信注册 -->
+				        <form class="mui-input-group" autocomplete="off">
+							<div class="mui-input-row">
+								<input id='phoneNum' type="number" class="mui-input-clear mui-input" placeholder="请输入手机号">
+							</div>
+							<div class="mui-input-row">
+								<button id='sendSmsBtn' type="button" class="mui-btn mui-btn-blue mui-btn-block" style="padding-right: 27%;">发送验证码</button>
+								<input id='smsCheckCode' type="number" class="mui-input" placeholder="请输入验证码" style="padding-left: 15px;width: 68%;">
+							</div>
+							<div class="mui-input-row">
+								 <input type="password" style="display:none"/>
+								<input id='smsPassword' type="text" class="mui-input-password" onfocus="this.type='password'" autocomplete="off" placeholder="请输入登录密码">
+							</div>
+							<div class="mui-text-left" style="color: red;margin-top: 10px;">
+					            <span class="mui-icon mui-icon-info" style="padding-left: 4%;font-size: larger;font-weight: bold;"></span>
+					            <h6 style="position: relative;display: -webkit-inline-box;">登录密码必须包含字母和数字，至少6位</h6>
+					        </div> 
+							<div class="mui-content-padded">
+								<button id='smsReg' class="mui-btn mui-btn-block mui-btn-primary">确认注册</button>
+							</div>
+						</form>
+					</div>
+			    </li>
+			</ul>
+			
+			<div class="mui-input-row mui-checkbox mui-left mentck" style="position: fixed;bottom: 0;display: table;width: 100%;text-align: center;margin-left: 5%;">
+			    <label style="padding-left: 5%;margin-left: 2%;"><a>勾选即视为同意《融跃教育服务协议》</a></label>
+			    <input id="agreementCK" type="checkbox" checked>
+			</div>
+			
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript" src="js/sendRequest.js" ></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js" type="text/javascript"></script>
+		<script>
+			(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					//设置底部位置，不会被键盘顶上去
+					document.getElementsByClassName('mentck')[0].style.top = (plus.display.resolutionHeight - 40) + "px";
+
+					var toLogin = function() {
+						$.openWindow({
+							url: 'login.html',
+							id: 'login',
+							preload:true,
+							show: {
+								aniShow: 'pop-in'
+							},
+							styles: {
+								popGesture: 'hide'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+					};
+					// 邮箱注册
+					var accountBox = doc.getElementById('account');
+					var passwordBox = doc.getElementById('password');
+					var emailBox = doc.getElementById('email');
+					var emailRegBtn = doc.getElementById('emailReg');
+					
+					emailRegBtn.addEventListener('tap', function(event) {
+						if(!accountBox.value || accountBox.value.trim() ==""){
+							plus.nativeUI.toast('用户名不能为空');
+							return;
+						}
+						if(!passwordBox.value || passwordBox.value.trim() ==""){
+							plus.nativeUI.toast('密码不能为空');
+							return;
+						}
+						if(!emailBox.value || emailBox.value.trim() ==""){
+							plus.nativeUI.toast('邮箱不能为空');
+							return;
+						}
+						var regInfo = {
+							account: accountBox.value,
+							password: passwordBox.value,
+							email: emailBox.value
+						};
+						app.reg(regInfo, function(data,msg) {
+							if (data && msg) {
+								plus.nativeUI.toast(msg);
+								// 注册完成之后去登录
+								toLogin();
+							}else{
+								plus.nativeUI.toast(msg);
+							}
+							return;
+						});
+					});
+					
+					// 短信注册
+					var phoneNumBox = doc.getElementById('phoneNum');
+					var smsPasswordBox = doc.getElementById('smsPassword');
+					var smsCheckCodeBox = doc.getElementById('smsCheckCode');
+					var smsRegBtn = doc.getElementById('smsReg');
+					// 点击发送验证码
+					mui(document.body).on('tap','#sendSmsBtn', function(e){
+						if(!phoneNumBox.value || phoneNumBox.value.trim() == ""){
+							plus.nativeUI.toast("手机号码不能为空");
+							return;
+						}
+						var sendSmsBtn = mui(this);
+						var i = 60;
+						var myVar=setInterval(function(){
+							if(i && i==1){
+								sendSmsBtn[0].innerText = '发送验证码';
+								window.clearInterval(myVar);
+								return;
+							}
+							i--;
+							sendSmsBtn[0].innerText = '已发送 ('+i+'s)';
+						},1000);
+						// 发送短信
+						appSendReq.sendSMS(phoneNumBox.value,function(data){
+							if(data){
+								data = JSON.parse(data);
+								if('200'==data.code && data.msg){
+									plus.nativeUI.toast(data.msg);
+									return;
+								}
+								plus.nativeUI.toast(data.msg);
+							}
+							plus.nativeUI.toast("短信发送失败");
+						})
+					});
+					// 点击短信注册按钮
+					smsRegBtn.addEventListener('tap', function(event) {
+						if(!phoneNumBox.value || phoneNumBox.value.trim() ==""){
+							plus.nativeUI.toast('手机号码不能为空');
+							return;
+						}
+						if(!smsPasswordBox.value || smsPasswordBox.value.trim() ==""){
+							plus.nativeUI.toast('密码不能为空');
+							return;
+						}
+						if(!smsCheckCodeBox.value || smsCheckCodeBox.value.trim() ==""){
+							plus.nativeUI.toast('验证码不能为空');
+							return;
+						}
+						var regInfo = {
+							phoneNum: phoneNumBox.value,
+							password: smsPasswordBox.value,
+							checkCode: smsCheckCodeBox.value
+						};
+						app.reg(regInfo, function(data,msg) {
+							if (data && msg) {
+								plus.nativeUI.toast(msg);
+								// 注册完成之后去登录
+								toLogin();
+							}else{
+								plus.nativeUI.toast(msg);
+							}
+							return;
+						});
+					});
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

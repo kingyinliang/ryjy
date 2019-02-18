@@ -1,0 +1,70 @@
+{
+  "main.html": {
+    "refer": [
+      "setting.html",
+      "login.html",
+      "vedioplay.html",
+      "video.html",
+      "polyvPlay.html",
+      "resetpwd.html",
+      "servicetext.html",
+      "aboutwe.html"
+    ]
+  },
+  "login.html": {
+    "refer": [
+      "main.html",
+      "reg.html",
+      "forget_password.html",
+      "smsLogin.html",
+      "forgetPwd.html"
+    ]
+  },
+  "smsLogin.html": {
+    "refer": [
+      "main.html",
+      "smsLogin.html"
+    ],
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "js/sendRequest.js",
+      "css/mui.min.css",
+      "css/style.css",
+      "fonts/mui.ttf"
+    ]
+  },
+  "vedioplay.html": {
+    "refer": [
+      "main.html"
+    ]
+  },
+  "video.html": {
+    "refer": [
+      "main.html"
+    ]
+  },
+  "polyvPlay.html": {
+    "refer": [
+      "main.html"
+    ],
+    "resources": [
+      "/js/polyvplayer.min.js"
+    ]
+  },
+  "reg.html": {
+    "refer": [
+      "reg.html"
+    ]
+  },
+  "forgetPwd.html": {
+    "refer": [
+      "forgetPwd.html"
+    ]
+  },
+  "resetpwd.html": {
+    "refer": [
+      "resetpwd.html"
+    ]
+  }
+}

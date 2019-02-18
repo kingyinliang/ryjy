@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>找回密码</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+		<style>
+			.area {
+				margin: 20px auto 0px auto;
+			}
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			.mui-input-group label {
+				width: 22%;
+			}
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 78%;
+			}
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			.mui-btn {
+				padding: 10px;
+			}
+			.mui-input-row label~input, .mui-input-row label~select, .mui-input-row label~textarea{
+				margin-top: 1px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">找回密码</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+			    <li class="mui-table-view-cell mui-collapse mui-active">
+			        <a class="mui-navigate-right" href="#">邮箱找回</a>
+			        <div class="mui-collapse-content">
+			           <form class="mui-input-group">
+							<div class="mui-input-row">
+								<input id='email' type="email" class="mui-input-clear mui-input" placeholder="请输入注册邮箱">
+							</div>
+							<div class="mui-content-padded">
+								<button id='sendMail' type="button" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined">发送邮件</button>
+							</div>
+							<div class="mui-input-row">
+								<input id='checkMailCode' type="number" class="mui-input" placeholder="请输入邮箱收到的验证码">
+							</div>
+							<div class="mui-input-row">
+								<input id='newPassword' type="password" class="mui-input-password" placeholder="请输入新登录密码">
+							</div>
+							<div class="mui-text-left" style="color: red;margin-top: 10px;">
+					            <span class="mui-icon mui-icon-info" style="padding-left: 4%;font-size: larger;font-weight: bold;"></span>
+					            <h6 style="position: relative;display: -webkit-inline-box;">登录密码必须包含字母和数字，至少6位</h6>
+					        </div> 
+							<div class="mui-content-padded">
+								<button id='mailResetPwd' class="mui-btn mui-btn-block mui-btn-primary">重置密码</button>
+							</div>
+						</form>
+			        </div>
+			    </li>
+			    <li class="mui-table-view-cell mui-collapse">
+			        <a class="mui-navigate-right" href="#">短信找回</a>
+			            <div class="mui-collapse-content">
+			            <form class="mui-input-group">
+							<div class="mui-input-row">
+								<input id='phoneNum' type="number" class="mui-input-clear mui-input" placeholder="请输入手机号">
+							</div>
+							<div class="mui-input-row">
+								<button id='sendSmsBtn' type="button" class="mui-btn mui-btn-blue mui-btn-block" style="padding-right: 27%;">发送验证码</button>
+								<input id='smsCheckCode' type="number" class="mui-input" placeholder="请输入验证码" style="padding-left: 15px;width: 68%;">
+							</div>
+							<div class="mui-input-row">
+								<input id='newSmsPwd' type="password" class="mui-input-password" placeholder="请输入新登录密码">
+							</div>
+							<div class="mui-text-left" style="color: red;margin-top: 10px;">
+					            <span class="mui-icon mui-icon-info" style="padding-left: 4%;font-size: larger;font-weight: bold;"></span>
+					            <h6 style="position: relative;display: -webkit-inline-box;">登录密码必须包含字母和数字，至少6位</h6>
+					        </div> 
+							<div class="mui-content-padded">
+								<button id='smsResetPwd' class="mui-btn mui-btn-block mui-btn-primary">重置密码</button>
+							</div>
+						</form>
+			        </div>
+			    </li>
+			</ul>
+			
+			
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript" src="js/sendRequest.js" ></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js" type="text/javascript"></script>
+		<script>
+			(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					// 邮箱找回
+					var sendButton = doc.getElementById('sendMail');
+					var checkMailCode = doc.getElementById('checkMailCode');
+					var newPassword = doc.getElementById('newPassword');
+					var emailBox = doc.getElementById('email');
+					var mailResetPwd = doc.getElementById('mailResetPwd');
+					// 发送邮件
+					sendButton.addEventListener('tap', function(){
+						if(!emailBox.value || emailBox.value.trim() == ""){
+							plus.nativeUI.toast("邮箱不能为空");
+						}
+						appSendReq.sendMail(emailBox.value,function(data){
+							data = JSON.parse(data);
+							if(data){
+								plus.nativeUI.toast(data.msg);
+								return;
+							}
+							plus.nativeUI.toast("邮件发送失败");
+						});
+					});
+					// 邮箱重置密码
+					mailResetPwd.addEventListener('tap', function() {
+						if(!emailBox.value || emailBox.value.trim() == ""){
+							plus.nativeUI.toast("邮箱不能为空");
+							return;
+						}
+						if(!checkMailCode.value || checkMailCode.value.trim() == ""){
+							plus.nativeUI.toast("验证码不能为空");
+							return;
+						}
+						if(!newPassword.value || newPassword.value.trim() == ""){
+							plus.nativeUI.toast("新密码不能为空");
+							return;
+						}
+						var mailResetInfo = {
+							email:emailBox.value,
+							checkMailCode:checkMailCode.value,
+							password:newPassword.value
+						};
+						app.forgetPassword(mailResetInfo, function(e,msg) {
+							if(e && msg){
+								plus.nativeUI.toast(msg);
+								$("#email").value="";
+								$("#checkMailCode").value="";
+								$("#newPassword").value="";
+								$.back();
+							}
+							plus.nativeUI.toast(e);
+							return;
+						});
+					}, false);
+					
+					
+					var phoneNumBox = doc.getElementById("phoneNum");
+					var smsCheckCode = doc.getElementById('smsCheckCode');
+					var newSmsPwd = doc.getElementById('newSmsPwd');
+					
+					// 短信重置密码--点击发送短信
+					doc.getElementById("sendSmsBtn").addEventListener('tap',function(){
+						if(!phoneNumBox.value || phoneNumBox.value.trim() == ""){
+							plus.nativeUI.toast("手机号码不能为空");
+							return;
+						}
+						var sendSmsBtn = mui(this);
+						var i = 60;
+						var myVar=setInterval(function(){
+							if(i && i==1){
+								sendSmsBtn[0].innerText = '发送验证码';
+								window.clearInterval(myVar);
+								return;
+							}
+							i--;
+							sendSmsBtn[0].innerText = '已发送 ('+i+'s)';
+						},1000);
+						// 发送短信
+						appSendReq.sendSMS(phoneNumBox.value,function(data){
+							if(data){
+								data = JSON.parse(data);
+								if('200'==data.code && data.msg){
+									plus.nativeUI.toast(data.msg);
+									return;	
+								}
+								plus.nativeUI.toast(data.msg);
+							}
+							plus.nativeUI.toast("短信发送失败");
+						})
+					});
+					// 短信重置密码
+					doc.getElementById("smsResetPwd").addEventListener('tap',function(){
+						if(!phoneNumBox.value && phoneNumBox.value.trim() == ""){
+							plus.nativeUI.toast("手机号不能为空");
+							return;
+						}
+						if(!smsCheckCode.value && smsCheckCode.value.trim() == ""){
+							plus.nativeUI.toast("验证码不能为空");
+							return;
+						}
+						if(!newSmsPwd.value && newSmsPwd.value.trim() == ""){
+							plus.nativeUI.toast("新密码不能为空");
+							return;
+						}
+						var newPwdInfo = {
+							phone:phoneNumBox.value,
+							code:smsCheckCode.value,
+							password:newSmsPwd.value
+						};
+						app.forgetPassword(newPwdInfo,function(data,msg){
+							if(data && msg){
+								plus.nativeUI.toast(msg);
+								$("#phoneNum").value="";
+								$("#smsCheckCode").value="";
+								$("#newSmsPwd").value="";
+								$.back();
+							}
+						});
+						
+					});
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>
